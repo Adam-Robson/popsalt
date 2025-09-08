@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+:root {
+  --seasalt: #f8f9faff;
+  --antiflash: #e9ecefff;
+  --platinum: #cfd6dbff;
+  --smoke: #dee2e6ff;
+  --gray: #adb5bdff;
+  --slate-gray: #6c757dff;
+  --fred: #547d8dff;
+  --outer-space: #30353aff;
+  --jet: #333435ff;
+  --saffron: #f5cb5cff;
+  --eerie: #242423ff;
+  --black: #212529ff;
+
+  --background: var(--seasalt);
+  --background-40: var(--antiflash);
+  --foreground: var(--jet);
+  --foreground--50:var(--eerie);
+  --primary: var(--fred);
+  --primary-50: var(--saffron);
+  --secondary: var(--slate-gray);
+  --alt-secondary: var(--smoke);
+  --border: var(--outer-space);
+  --canvas: 
+    linear-gradient(120deg, #ffffffa3 0%, #a0a9be8c 57%, #60758ca8 93%),
+    linear-gradient(147deg, #bbe0e2ff 14%, #cbd9e2ff 49%, #f5f5fbff 90%),
+    linear-gradient(107deg, #ecf3f7ff 22%, #cbd9e2ff 55%, #f5f5fbff 93%),
+    linear-gradient(111deg, #f5f5fbff 15%, #cbcbecd6 53%, #f5f5fbff 96%);
+  --barlow: 'Barlow', Arial, Helvetica, sans-serif;
+  --text: var(--foreground);
+}
+
+:root[data-theme="dark"] {
+  --antiflash: #e9ecefff;
+  --platinum: #cfd6dbff;
+  --smoke: #dee2e6ff;
+  --gray: #adb5bdff;
+  --slate-gray: #6c757dff;
+  --fred: #547d8dff;
+  --outer-space: #495057ff;
+  --jet: #333435ff;
+  --saffron: #f5cb5cff;
+  --eerie: #242423ff;
+  --black: #212529ff;
+
+  --background: var(--sesalt);
+  --background-40: var(--antiflash);
+  --foreground: var(--jet);
+  --foreground--50:var(--eerie);
+  --primary: var(--fred);
+  --primary-50: var(--saffron);
+  --secondary: var(--slate-gray);
+  --alt-secondary: var(--smomke);
+  --border: var(--outer-space);
+  --canvas: 
+    linear-gradient(120deg, #1e1c1ce6 0%, #23262af5 61%, #49494ae4 100%),
+    linear-gradient(155deg, #111010 7%, #22272f 30%, #2c2c2cff 66%, #333334 96%),
+    linear-gradient(142deg, #1a1919f9 30%, #262c34f5 75%, #4444457a 95%),
+    linear-gradient(105deg, #101010 0%, #20262dff 22%, #181e26ff 49%, #4042438e 79%, #4b515ab4 95%),
+    linear-gradient(115deg, #131212 0%, #2f3440ff 68%, #323232ff 93%);
+}
+
+*,
+*::before,
+*::after { 
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  line-height: inherit;
+  list-style: none;
+  text-decoration: none;
+}
+
+html, body {
+  block-size: 100%;
+  margin: 0;
+  padding: 0;
+  color-scheme: light dark;
+}
+
+body {
+  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--background);
+  background-image: var(--canvas);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-clip: border-box;
+  background-origin: border-box;
+  color: var(--text);
+  font-family: var(--barlow), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+button, a {
+  font-weight: 400;
+  font-size: 1.08rem;
+  font-family: inherit;
+  opacity: 0.75;
+  border: none;
+  text-decoration: none;
+  background: none;
+  cursor: pointer;
+  transition: 
+    font-weight 0.45s ease-in-out 0s,
+    font-size 0.45s ease-in-out 0,
+    opacity 0.45s ease-in-out 0;
+}
+
+button,
+a:hover {
+  font-weight: 500;
+  font-size: 1.13rem;
+  opacity: 0.9;
+}
