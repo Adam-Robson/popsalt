@@ -5,8 +5,8 @@ import type { WordCarouselType } from '@/types/word-carousel';
 
 export default function WordCarousel({ 
   words, 
-  hold = 3000, 
-  fade = 1000, 
+  hold = 2555, 
+  fade = 6666, 
   className 
 }: WordCarouselType) {
   const [index, setIndex] = useState(0);

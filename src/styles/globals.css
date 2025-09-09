@@ -1,35 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  --seasalt: #f8f9faff;
-  --antiflash: #e9ecefff;
-  --platinum: #cfd6dbff;
-  --smoke: #dee2e6ff;
-  --gray: #adb5bdff;
-  --slate-gray: #6c757dff;
-  --fred: #547d8dff;
-  --outer-space: #30353aff;
-  --jet: #333435ff;
-  --saffron: #f5cb5cff;
+  --rich: #01161eff;
   --eerie: #242423ff;
-  --black: #212529ff;
-
-  --background: var(--seasalt);
-  --background-40: var(--antiflash);
-  --foreground: var(--jet);
-  --foreground--50:var(--eerie);
-  --primary: var(--fred);
-  --primary-50: var(--saffron);
-  --secondary: var(--slate-gray);
-  --alt-secondary: var(--smoke);
-  --border: var(--outer-space);
+  --jet: #333435ff;
+  --midnight: #124559ff;
+  --slate: #6c757dff;
+  --fred: #547d8dff;
+  --air: #598392ff;
+  --saffron: #f5cb5cff;
+  --french: #adb5bdff;
+  --ash: #aec3b0ff;
+  --platinum: #cfd6dbff;
+  --beige: #eff6e0ff;
+  --antiflash: #e9ecefff;
+  --background: var(--antiflash);
+  --background-50: var(--platinum);
+  --foreground: var(--eerie);
+  --foreground-50:var(--rich);
+  --primary: var(--midnight);
+  --primary-50: var(--fred);
+  --secondary: var(--air);
+  --secondary-50: var(--slate);
+  --accent: var(--saffron);
+  --accent-50: var(--beige);
+  --border: var(--jet);
+  --barlow: 'Barlow', Arial, Helvetica, sans-serif;
   --canvas: 
     linear-gradient(120deg, #ffffffa3 0%, #a0a9be8c 57%, #60758ca8 93%),
     linear-gradient(147deg, #bbe0e2ff 14%, #cbd9e2ff 49%, #f5f5fbff 90%),
     linear-gradient(107deg, #ecf3f7ff 22%, #cbd9e2ff 55%, #f5f5fbff 93%),
     linear-gradient(111deg, #f5f5fbff 15%, #cbcbecd6 53%, #f5f5fbff 96%);
-  --barlow: 'Barlow', Arial, Helvetica, sans-serif;
-  --text: var(--foreground);
 }
 
 :root[data-theme="dark"] {
@@ -45,15 +46,19 @@
   --eerie: #242423ff;
   --black: #212529ff;
 
-  --background: var(--jet);
-  --background-40: var(--eerie);
-  --foreground: var(--smoke);
-  --foreground--50:var(--antiflash);
-  --primary: var(--fred);
-  --primary-50: var(--slate-gray);
-  --secondary: var(--saffron);
-  --alt-secondary: var(--smoke);
-  --border: var(--outer-space);
+  --background: var(--eerie);
+  --background-50: var(--rich);
+  --foreground: var(--antiflash);
+  --foreground-50:var(--platinum);
+  --primary: var(--midnight);
+  --primary-50: var(--fred);
+  --secondary: var(--air);
+  --secondary-50: var(--slate);
+  --accent: var(--saffron);
+  --accent-50: var(--beige);
+
+  --border: var(--jet);
+
   --canvas: 
     linear-gradient(120deg, #1e1c1ce6 0%, #23262af5 61%, #49494ae4 100%),
     linear-gradient(155deg, #111010 7%, #22272f 30%, #2c2c2cff 66%, #333334 96%),
@@ -75,15 +80,17 @@
 }
 
 html, body {
+  height: 100%;
   block-size: 100%;
+  font-size: 100%;
   margin: 0;
   padding: 0;
   color-scheme: light dark;
 }
 
 body {
-  width: 100dvh;
-  min-block-size: 100dvh;
+  min-width: 100dvw;
+  min-block-size: 100dvw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -92,14 +99,11 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-clip: border-box;
-  background-origin: border-box;
   color: var(--foreground);
   font-family: var(--barlow), Arial, Helvetica, sans-serif;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
-  font-size: 1rem;
 }
 
 button, a {
@@ -108,7 +112,7 @@ button, a {
   text-decoration: none;
   background: none;
   cursor: pointer;
-  padding: 0.1rem 0.25rem;
+  padding: 0.3rem 0.5rem;
   transition: 
     text-decoration 0.45s ease-in-out 0,
     opacity 0.45s ease-in-out 0,
@@ -117,54 +121,8 @@ button, a {
 
 button:hover,
 a:hover {
-  border: var(--foreground-50) solid 1px;
-  background: var(--background-50);
+  border: var(--foreground) solid 1px;
+  background: var(--background);
   border-radius: 4px;
   text-decoration: underline;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .fade-up-enter {
-    opacity: 0;
-    transform: translateY(8px);
-    filter: saturate(0.96) blur(0.25px);
-    animation: fade-up 420ms cubic-bezier(.2,.8,.2,1) forwards;
-  }
-  .fade-up-stagger > * {
-    opacity: 0;
-    transform: translateY(6px);
-    animation: fade-up 480ms cubic-bezier(.2,.8,.2,1)
-               forwards;
-  }
-  .fade-up-stagger > *:nth-child(1) { animation-delay: 60ms; }
-  .fade-up-stagger > *:nth-child(2) { animation-delay: 110ms; }
-  .fade-up-stagger > *:nth-child(3) { animation-delay: 160ms; }
-  .fade-up-stagger > *:nth-child(4) { animation-delay: 210ms; }
-
-  @keyframes fade-up {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-      filter: saturate(1) blur(0);
-    }
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .rule-reveal {
-    position: relative;
-  }
-  .rule-reveal::after {
-    content: "";
-    position: absolute;
-    inset-inline: 0;
-    bottom: -0.5rem;
-    height: 1px;
-    background: currentColor;
-    opacity: 0.2;
-    transform: scaleX(0);
-    transform-origin: 0% 50%;
-    animation: rule-in 420ms ease-out 180ms forwards;
-  }
-  @keyframes rule-in { to { transform: scaleX(1); } }
 }

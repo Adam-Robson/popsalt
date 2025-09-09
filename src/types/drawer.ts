@@ -1,10 +1,12 @@
 import { ReactNode } from 'react';
 
-export type DrawerType = {
-  side: string;
+export type DrawerSideType = 'left' | 'right' | 'top' | 'bottom';
+
+export interface DrawerType {
   open: boolean;
   onClose: () => void;
-  ariaLabelledBy: string;
-  tooltip?: string;
+  side?: DrawerSideType;
+  ariaLabelledBy?: string;
+  className?: string;
   children: ReactNode;
-};
+}

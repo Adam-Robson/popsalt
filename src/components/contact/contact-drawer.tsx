@@ -1,25 +1,27 @@
 'use client';
 
-import React from 'react';
-import MotionDrawer from '@/components/utility-components/motion-drawer';
+import { useEffect, useRef } from 'react';
+import { MotionDrawer } from '@/components/utility-components/motion-drawer';
 import { MotionButton } from '@/components/utility-components/motion-button';
 import { PaperPlaneRightIcon } from '@phosphor-icons/react';
 import { useContactForm } from '@/hooks/use-contact-form';
-import type { ContactType } from '@/lib/types';
+import type { ContactDrawerType } from '@/types/contact-drawer';
+import Icon from '../utility-components/icon';
 
-export function ContactDrawer({ open, onClose }: ContactType) {
+export function ContactDrawer({ open, onClose }: ContactDrawerType) {
+  const titleId = 'contact-title';
+  const focusRef = useRef<HTMLDivElement | null>(null);
+  
   const { bind, status, error, firstError, handleSubmit } =
     useContactForm();
-
-  const contactFocusRef =
-    React.useRef<HTMLDivElement | null>(null);
 
   const isSubmitting = status === 'submitting';
   const hasError = status === 'error';
   const isSuccess = status === 'success';
 
-  React.useEffect(() => {
-    if (open) contactFocusRef.current?.focus();
+  useEffect(() => {
+    if (!open) return;
+    if (focusRef.current) focusRef.current.focus();
   }, [open]);
 
   return (
@@ -27,7 +29,7 @@ export function ContactDrawer({ open, onClose }: ContactType) {
       side="right"
       open={open}
       onClose={onClose}
-      ariaLabelledBy="contact-title"
+      ariaLabelledBy={titleId}
       className="p-8"
     >
       <div className="h-full flex flex-col">
@@ -36,12 +38,12 @@ export function ContactDrawer({ open, onClose }: ContactType) {
             Contact
           </h2>
           <MotionButton onClick={onClose} aria-label="Close Contact">
-            Close
+            <Icon name="x" />
           </MotionButton>
         </div>
 
         <div
-          ref={contactFocusRef}
+          ref={focusRef}
           tabIndex={-1}
           className="outline-none overflow-y-auto"
         >

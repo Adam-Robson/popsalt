@@ -15,7 +15,7 @@ export function ToggleTheme() {
       aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
     >
        <Icon 
-        name={isDark ? 'moon' : 'sun'} 
+        name={isDark ? 'sun' : 'moon'} 
         label={`Toggle ${isDark ? 'light' : 'dark' } theme`} 
         className={isDark ? 'text-neutral-200' : 'text-neutral-800'} 
       />

@@ -1,120 +1,109 @@
 'use client';
 
-import React from 'react';
-import {
-  motion,
-  AnimatePresence,
-  useReducedMotion,
-} from 'motion/react';
-import clsx from 'clsx';
+import type { DrawerSideType, DrawerType } from '@/types/drawer';
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { MotionButton } from './motion-button';
+import { motion } from 'motion/react';
 
-export type MotionDrawerSide =
-  | 'left' | 'right' | 'top' | 'bottom';
+export function MotionDrawer(props: DrawerType) {
+  const {
+    open,
+    onClose,
+    side = 'left',
+    ariaLabelledBy,
+    className = '',
+    children,
+  } = props;
 
-export type MotionDrawerProps = {
-  side: MotionDrawerSide;
-  open: boolean;
-  onClose: () => void;
-  ariaLabelledBy: string;
-  className?: string;
-  children: React.ReactNode;
-};
+  const [mounted, setMounted] = useState(false);
+  const panelRef = useRef<HTMLDivElement | null>(null);
 
-/* variants kept at module scope */
-const BACKDROP_VARS = {
-  hidden: { opacity: 0 },
-  show:   { opacity: 0.6 },
-} as const;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-const PANEL_VARS = {
-  left:   { hidden: { x: -24, opacity: 0 },
-            show:   { x: 0,   opacity: 1 } },
-  right:  { hidden: { x: 24,  opacity: 0 },
-            show:   { x: 0,   opacity: 1 } },
-  top:    { hidden: { y: -24, opacity: 0 },
-            show:   { y: 0,   opacity: 1 } },
-  bottom: { hidden: { y: 24,  opacity: 0 },
-            show:   { y: 0,   opacity: 1 } },
-} as const;
+  useEffect(() => {
+    if (!open) return;
+    const el = panelRef.current;
+    if (el) el.focus();
+  }, [open]);
 
-const PANEL_TRANS = {
-  type: 'spring',
-  stiffness: 420,
-  damping: 34,
-} as const;
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [open, onClose]);
 
-const BACKDROP_TRANS = { duration: 0.18 } as const;
+  if (!mounted) return null;
+  if (!open) return null;
 
-/* stopPropagation helper (module scope) */
-function stop(
-  e: React.MouseEvent<HTMLElement, MouseEvent>
-): void {
-  e.stopPropagation();
-}
+  const root = typeof window !== 'undefined' ? document.body : null;
+  if (!root) return null;
 
-export default function MotionDrawer({
-  side,
-  open,
-  onClose,
-  ariaLabelledBy,
-  className,
-  children,
-}: MotionDrawerProps) {
-  const reduce = useReducedMotion();
-  const pv = PANEL_VARS[side];
+  const sidePos: Record<DrawerSideType, string> = {
+    left: 'left-0 top-0 h-screen w-80 md:w-96',
+    right: 'right-0 top-0 h-screen w-80 md:w-96',
+    top: 'left-0 top-0 w-screen h-1/2',
+    bottom: 'left-0 bottom-0 w-screen h-1/2',
+  };
 
-  return (
-    <AnimatePresence initial={false} mode="wait">
-      {open && (
-        <motion.div
-          key="md-backdrop"
-          className="fixed inset-0 z-50
-                     bg-black/80"
-          role="presentation"
-          onClick={onClose}
-          initial="hidden"
-          animate="show"
-          exit="hidden"
-          variants={BACKDROP_VARS}
-          transition={reduce ? undefined : BACKDROP_TRANS}
-        >
-          <div
-            className={clsx(
-              'absolute inset-0 flex',
-              side === 'left'  && 'justify-start',
-              side === 'right' && 'justify-end',
-              side === 'top'   && 'items-start',
-              side === 'bottom'&& 'items-end'
-            )}
-          >
-            <motion.aside
-              key="md-panel"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={ariaLabelledBy}
-              tabIndex={-1}
-              onClick={stop}
-              className={clsx(
-                'w-[min(88vw,520px)] h-dvh',
-                'bg-[var(--background)]/85',
-                'backdrop-blur-xl shadow-2xl',
-                'outline-0',
-                side === 'top'    && 'w-dvw h-[min(88vh,520px)]',
-                side === 'bottom' && 'w-dvw h-[min(88vh,520px)]',
-                className
-              )}
-              initial="hidden"
-              animate="show"
-              exit="hidden"
-              variants={pv}
-              transition={reduce ? undefined : PANEL_TRANS}
-              style={{ willChange: 'transform, opacity' }}
-            >
-              {children}
-            </motion.aside>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+  const sideTransform: Record<DrawerSideType, string> = {
+    left: 'data-[state=closed]:-translate-x-full',
+    right: 'data-[state=closed]:translate-x-full',
+    top: 'data-[state=closed]:-translate-y-full',
+    bottom: 'data-[state=closed]:translate-y-full',
+  };
+
+  const panelClasses = [
+    'fixed z-50',
+    sidePos[side],
+    'bg-[var(--background)]/95',
+    'text-[var(--foreground)]',
+    'shadow-2xl backdrop-saturate-150',
+    'outline-none focus-visible:ring-2',
+    'focus-visible:ring-[var(--accent)]',
+    'transition-transform duration-300',
+    'ease-out will-change-transform',
+    'translate-x-0 translate-y-0',
+    sideTransform[side],
+    className,
+  ].join(' ');
+
+  const overlayClasses = [
+    'fixed inset-0 z-40',
+    'bg-black/35',
+    'backdrop-blur-md',
+    'supports-backdrop-blur:backdrop-blur-md',
+    'data-[state=open]:opacity-100',
+    'data-[state=closed]:opacity-0',
+    'transition-opacity duration-200 ease-out',
+  ].join(' ');
+
+  return createPortal(
+    <div aria-hidden={!open} className="contents">
+      <MotionButton
+        type="button"
+        aria-label="Close drawer overlay"
+        data-state={open ? 'open' : 'closed'}
+        className={overlayClasses}
+        onClick={onClose}
+      />
+      <motion.div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={ariaLabelledBy}
+        tabIndex={-1}
+        data-state={open ? 'open' : 'closed'}
+        className={panelClasses}
+      >
+        {children}
+      </motion.div>
+    </div>,
+    root
   );
 }
