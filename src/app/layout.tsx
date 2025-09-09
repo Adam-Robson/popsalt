@@ -29,7 +29,9 @@ export default function RootLayout({
       <body
         className={`${barlow.variable} ${suse.variable} antialiased`}
       >
-        {children}
+        <div className="fade-up-enter">
+          {children}
+        </div>
       </body>
     </html>
   );
